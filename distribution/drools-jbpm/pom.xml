@@ -1,0 +1,262 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>org.flowframe.distribution</artifactId>
+		<groupId>org.flowframe</groupId>
+		<version>0.0.1</version>
+		<relativePath>..</relativePath>
+	</parent>
+	<artifactId>org.flowframe.distribution.drools-jbpm</artifactId>
+	<packaging>pom</packaging>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<inherited>false</inherited>
+				<executions>
+					<execution>
+						<id>copy-dependencies</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>dependencies</outputDirectory>
+							<overWriteReleases>true</overWriteReleases>
+							<overWriteSnapshots>true</overWriteSnapshots>
+							<overWriteIfNewer>true</overWriteIfNewer>
+							<stripVersion>false</stripVersion>
+							<includeScope>runtime</includeScope>
+							<excludeTransitive>true</excludeTransitive>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<inherited>false</inherited>
+				<executions>
+					<execution>
+						<id>clean plugins</id>
+						<phase>clean</phase>
+						<configuration>
+							<tasks>
+								<delete>
+									<fileset dir="dependencies" includes="**/*.jar"
+										excludes="com.springsource.org.jgroups-2.2.8.jar, com.springsource.org.objectweb.asm-1.5.3.jar, **/.gitignore" />
+								</delete>
+							</tasks>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>copy to virgo repository</id>
+						<phase>package</phase>
+						<configuration>
+							<tasks>
+								<copy todir="../virgo-bundles/repository/flowframe/drools-jbpm">															
+									<filelist dir="dependencies">
+									    <file name="org.flowframe.bpm.jbpm.bpmserver-0.0.1.jar" />
+									    <file name="org.flowframe.bpm.jbpm.bpmserver.persistence-0.0.1.jar" />
+									    <file name="org.flowframe.bpm.jbpm.taskserver-0.0.1.jar" />
+									    <file name="org.flowframe.bpm.jbpm.taskserver.human-task-core.fragment-0.0.1.jar" />
+									    <file name="org.flowframe.bpm.jbpm.services-0.0.1.jar" />
+									    <file name="org.flowframe.bpm.jbpm.shared-0.0.1.jar" />
+									    <file name="org.flowframe.bpm.jbpm.taskserver.persistence-0.0.1.jar" />
+										<file name="org.flowframe.bpm.jbpm.persistence.datasource-0.0.1.jar" />
+									
+										<file name="org.flowframe.thirdparty.jbpm-bam-${jbpm.version}.jar" />
+										<file
+											name="org.flowframe.thirdparty.jbpm-human-task-core-${jbpm.version}.jar" />
+										<file
+											name="org.flowframe.thirdparty.jbpm-human-task-mina-${jbpm.version}.jar" />
+										<file
+											name="org.flowframe.thirdparty.jbpm-persistence-jpa-${jbpm.version}.jar" />
+										<file name="jbpm-flow-${jbpm.version}.jar" />
+										<file name="jbpm-bpmn2-${jbpm.version}.jar" />
+										<file name="jbpm-flow-builder-${jbpm.version}.jar" />
+										<file
+											name="org.flowframe.thirdparty.jbpm-workitems-${jbpm.version}.jar" />
+										<file name="drools-compiler-${drools.version}.jar" />
+										<file
+											name="org.flowframe.thirdparty.drools-core-${drools.version}.jar" />
+										<file
+											name="org.flowframe.thirdparty.drools-persistence-${drools.version}.jar" />
+										<file
+											name="org.flowframe.thirdparty.knowledge-api-${drools.version}.jar" />
+										<file
+											name="org.flowframe.thirdparty.knowledge-internal-api-${drools.version}.jar" />
+										<file name="org.flowframe.thirdparty.gwt-console-server-integration-2.3.2-SNAPSHOT.jar" />
+										<file name="org.flowframe.thirdparty.gwt-console-rpc-2.3.2-SNAPSHOT.jar" />	
+									</filelist>
+								</copy>	
+							</tasks>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+	<dependencies>
+		<dependency>
+			<groupId>org.flowframe</groupId>
+			<artifactId>org.flowframe.bpm.jbpm.bpmserver</artifactId>
+			<version>0.0.1</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>hibernate-core</artifactId>
+					<groupId>org.hibernate</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>hibernate-annotations</artifactId>
+					<groupId>org.hibernate</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>hibernate-tools</artifactId>
+					<groupId>org.hibernate</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>hibernate-entitymanager</artifactId>
+					<groupId>org.hibernate</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>	
+		<dependency>
+			<groupId>org.flowframe</groupId>
+			<artifactId>org.flowframe.bpm.jbpm.bpmserver.persistence</artifactId>
+			<version>0.0.1</version>
+		</dependency>		
+		<dependency>
+			<groupId>org.flowframe</groupId>
+			<artifactId>org.flowframe.bpm.jbpm.taskserver.human-task-core.fragment</artifactId>
+			<version>0.0.1</version>
+		</dependency>	
+		<dependency>
+			<groupId>org.flowframe</groupId>
+			<artifactId>org.flowframe.bpm.jbpm.taskserver</artifactId>
+			<version>0.0.1</version>
+		</dependency>		
+		<dependency>
+			<groupId>org.flowframe</groupId>
+			<artifactId>org.flowframe.bpm.jbpm.services</artifactId>
+			<version>0.0.1</version>
+		</dependency>	
+		<dependency>
+			<groupId>org.flowframe</groupId>
+			<artifactId>org.flowframe.bpm.jbpm.shared</artifactId>
+			<version>0.0.1</version>
+		</dependency>		
+		<dependency>
+			<groupId>org.flowframe</groupId>
+			<artifactId>org.flowframe.bpm.jbpm.taskserver.persistence</artifactId>
+			<version>0.0.1</version>
+		</dependency>									
+		<dependency>
+			<groupId>org.flowframe</groupId>
+			<artifactId>org.flowframe.bpm.jbpm.persistence.datasource</artifactId>
+			<version>0.0.1</version>
+		</dependency>									
+		<dependency>
+			<groupId>org.flowframe</groupId>
+			<artifactId>org.flowframe.thirdparty.com.mysql.jdbc</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.flowframe</groupId>
+			<artifactId>org.flowframe.thirdparty.bitronix</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.flowframe</groupId>
+			<artifactId>org.flowframe.thirdparty.hibernate.annotations.commons</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.flowframe</groupId>
+			<artifactId>org.flowframe.thirdparty.hibernate.core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.flowframe</groupId>
+			<artifactId>org.flowframe.thirdparty.hibernate.entitymanager</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.flowframe</groupId>
+			<artifactId>org.flowframe.thirdparty.jbpm-bam</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.flowframe</groupId>
+			<artifactId>org.flowframe.thirdparty.jbpm-human-task-core</artifactId>
+			<version>${jbpm.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.flowframe</groupId>
+			<artifactId>org.flowframe.thirdparty.jbpm-human-task-mina</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.flowframe</groupId>
+			<artifactId>org.flowframe.thirdparty.jbpm-persistence-jpa</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.flowframe</groupId>
+			<artifactId>org.flowframe.thirdparty.jbpm-workitems</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.flowframe</groupId>
+			<artifactId>org.flowframe.thirdparty.drools-core</artifactId>
+			<version>${drools.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jbpm</groupId>
+			<artifactId>jbpm-flow</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.jbpm</groupId>
+			<artifactId>jbpm-flow-builder</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.jbpm</groupId>
+			<artifactId>jbpm-bpmn2</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.mvel</groupId>
+			<artifactId>mvel2</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.drools</groupId>
+			<artifactId>drools-compiler</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.flowframe</groupId>
+			<artifactId>org.flowframe.thirdparty.drools-persistence</artifactId>
+			<version>${drools.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.flowframe</groupId>
+			<artifactId>org.flowframe.thirdparty.knowledge-api</artifactId>
+			<version>${drools.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.flowframe</groupId>
+			<artifactId>org.flowframe.thirdparty.knowledge-internal-api</artifactId>
+			<version>${drools.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.flowframe</groupId>
+			<artifactId>org.flowframe.thirdparty.jbpm-workitems</artifactId>
+		</dependency>	
+		<dependency>
+			<groupId>org.flowframe</groupId>
+			<artifactId>org.flowframe.thirdparty.gwt-console-server-integration</artifactId>
+			<version>2.3.2-SNAPSHOT</version>
+		</dependency>	
+		<dependency>
+			<groupId>org.flowframe</groupId>
+			<artifactId>org.flowframe.thirdparty.gwt-console-rpc</artifactId>
+			<version>2.3.2-SNAPSHOT</version>
+		</dependency>					
+	</dependencies>
+</project>
